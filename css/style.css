@@ -1,0 +1,395 @@
+/* Styles globaux */
+:root {
+    --tg-theme-bg-color: #212121;
+    --tg-theme-text-color: #ffffff;
+    --tg-theme-button-color: #8774e1;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: #2c2c2c;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* Entête et filtres */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--tg-theme-bg-color);
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 150px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+}
+
+/* Grille des plantes */
+.plants-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.plant-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.plant-card:active {
+    transform: scale(0.98);
+}
+
+.plant-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+
+.plant-info {
+    padding: 10px;
+}
+
+.plant-name {
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.plant-type {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Barre de navigation */
+.navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--tg-theme-secondary-bg-color);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    padding: 5px 0;
+}
+
+.nav-item.active {
+    color: var(--tg-theme-button-color);
+}
+
+.nav-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.info-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>');
+}
+
+.home-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>');
+}
+
+.contact-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>');
+}
+
+/* Popups des filtres */
+.filter-popup {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    right: 0;
+    background-color: var(--tg-theme-secondary-bg-color);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    transition: transform 0.3s ease;
+    transform: translateY(0);
+    z-index: 1000;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.filter-popup.show {
+    transform: translateY(-100%);
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popup-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--tg-theme-text-color);
+    font-size: 24px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.popup-content {
+    padding: 10px 20px 20px;
+}
+
+.filter-options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.filter-options li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-options li:last-child {
+    border-bottom: none;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+}
+
+.filter-option input {
+    margin-right: 10px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.overlay.show {
+    display: block;
+}
+
+/* Popup */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    overflow: auto;
+}
+
+.popup-content {
+    position: relative;
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.popup-image {
+    width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.popup-title {
+    font-size: 22px;
+    margin: 0 0 10px 0;
+}
+
+.popup-type {
+    color: #666;
+    margin: 0 0 15px 0;
+}
+
+.popup-details {
+    margin-bottom: 15px;
+}
+
+.popup-detail {
+    margin: 5px 0;
+}
+
+.popup-video-container {
+    margin-top: 20px;
+}
+
+.popup-video {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    margin: 10px 0;
+}
+
+.price-container {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.price-title {
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.price-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+/* Indicateur de chargement */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2e7d32;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsivité */
+@media (max-width: 600px) {
+    .plants-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .popup-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
+
+/* Lien d'administration */
+.admin-link {
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+}
+
+.admin-button {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.admin-button:hover {
+    background-color: #1b5e20;
+} 

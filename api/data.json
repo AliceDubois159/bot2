@@ -1,1 +1,61 @@
 
+{
+  "categories": [
+    "Autres",
+    "Toutes les catégories"
+  ],
+  "provenances": [
+    "Non spécifiée",
+    "Toutes les provenances"
+  ],
+  "plantes": [
+    {
+      "id": "rec8c8KqSQPMkSRw0",
+      "nom": "Sans nom",
+      "type": "",
+      "categorie": "Autres",
+      "provenance": "Non spécifiée",
+      "image": null,
+      "images": [],
+      "prix": {
+        "unite": "0€",
+        "par_3": "0€",
+        "par_5": "0€"
+      },
+      "videos": [],
+      "description": ""
+    },
+    {
+      "id": "recANc87qPt0NMNao",
+      "nom": "Sans nom",
+      "type": "",
+      "categorie": "Autres",
+      "provenance": "Non spécifiée",
+      "image": null,
+      "images": [],
+      "prix": {
+        "unite": "0€",
+        "par_3": "0€",
+        "par_5": "0€"
+      },
+      "videos": [],
+      "description": ""
+    },
+    {
+      "id": "recBTCphduRVxsUbQ",
+      "nom": "Sans nom",
+      "type": "",
+      "categorie": "Autres",
+      "provenance": "Non spécifiée",
+      "image": null,
+      "images": [],
+      "prix": {
+        "unite": "0€",
+        "par_3": "0€",
+        "par_5": "0€"
+      },
+      "videos": [],
+      "description": ""
+    }
+  ]
+}

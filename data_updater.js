@@ -70,12 +70,16 @@ async function fetchDataFromAirtable() {
       
       // Extraction des prix
       const prix = {};
-      if (fields['Prix 5g']) prix['5g'] = fields['Prix 5g'];
-      if (fields['Prix 10g']) prix['10g'] = fields['Prix 10g'];
-      if (fields['Prix 25g']) prix['25g'] = fields['Prix 25g'];
-      if (fields['Prix 50g']) prix['50g'] = fields['Prix 50g'];
-      if (fields['Prix 100g']) prix['100g'] = fields['Prix 100g'];
-      if (fields['Prix unité']) prix['unite'] = fields['Prix unité'];
+// Prix standards déjà supportés
+if (fields['Prix 3.5g']) prix['3.5g'] = fields['Prix 3.5g'];
+if (fields['Prix 5g']) prix['5g'] = fields['Prix 5g'];
+if (fields['Prix 10g']) prix['10g'] = fields['Prix 10g'];
+if (fields['Prix 25g']) prix['25g'] = fields['Prix 25g'];
+if (fields['Prix 50g']) prix['50g'] = fields['Prix 50g'];
+if (fields['Prix 100g']) prix['100g'] = fields['Prix 100g'];
+if (fields['Prix 500g']) prix['500g'] = fields['Prix 500g'];
+if (fields['Prix 1kg']) prix['1kg'] = fields['Prix 1kg'];
+if (fields['Prix 2kg']) prix['2kg'] = fields['Prix 2kg'];
       
       // Création de l'objet plante
       const plante = {

@@ -1,43 +1,47 @@
 {
   "categories": [
     "Toutes les catégories",
-    "Cali Plates"
+    "Hash Moroco",
+    "Weed Spain"
   ],
   "provenances": [
     "Toutes les provenances",
-    "Spain",
-    "France"
+    "Farm 1",
+    "Farm 2"
   ],
   "plantes": [
     {
-      "id": "rec123456",
+      "id": "recANc87qPt0NMNao",
       "nom": "Ff X ?",
-      "type": "Cali Plates",
-      "categorie": "Cali Plates",
-      "provenance": "France",
+      "type": "Hash",
+      "categorie": "Hash Moroco",
+      "provenance": "Farm 1",
       "image": null,
-      "prix": {
-        "5g": "35€",
-        "10g": "60€",
-        "25g": "120€"
-      },
+      "prix": {},
       "videos": [],
-      "description": "Plante d'excellente qualité, cultivée avec soin."
+      "description": "FF 45,\n220/73µ\n"
     },
     {
-      "id": "rec789012",
-      "nom": "Cali Spain",
-      "type": "Cali Plates",
-      "categorie": "Cali Plates",
-      "provenance": "Spain",
+      "id": "recGHtgifYl0GFQkR",
+      "nom": "VVS",
+      "type": "Hash",
+      "categorie": "Hash Moroco",
+      "provenance": "Farm 1",
       "image": null,
-      "prix": {
-        "5g": "30€",
-        "10g": "55€",
-        "25g": "115€"
-      },
+      "prix": {},
       "videos": [],
-      "description": "Plante importée d'Espagne, aux arômes exceptionnels."
+      "description": ""
+    },
+    {
+      "id": "recc1dOpI9IZs3uzL",
+      "nom": "Cali Spain",
+      "type": "Weed",
+      "categorie": "Weed Spain",
+      "provenance": "Farm 2",
+      "image": null,
+      "prix": {},
+      "videos": [],
+      "description": "Moroccan Peaches, 220/90µ"
     }
   ]
-} 
+}

@@ -1,0 +1,43 @@
+{
+  "categories": [
+    "Toutes les catégories",
+    "Cali Plates"
+  ],
+  "provenances": [
+    "Toutes les provenances",
+    "Spain",
+    "France"
+  ],
+  "plantes": [
+    {
+      "id": "rec123456",
+      "nom": "Ff X ?",
+      "type": "Cali Plates",
+      "categorie": "Cali Plates",
+      "provenance": "France",
+      "image": null,
+      "prix": {
+        "5g": "35€",
+        "10g": "60€",
+        "25g": "120€"
+      },
+      "videos": [],
+      "description": "Plante d'excellente qualité, cultivée avec soin."
+    },
+    {
+      "id": "rec789012",
+      "nom": "Cali Spain",
+      "type": "Cali Plates",
+      "categorie": "Cali Plates",
+      "provenance": "Spain",
+      "image": null,
+      "prix": {
+        "5g": "30€",
+        "10g": "55€",
+        "25g": "115€"
+      },
+      "videos": [],
+      "description": "Plante importée d'Espagne, aux arômes exceptionnels."
+    }
+  ]
+} 

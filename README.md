@@ -3,8 +3,6 @@
 Ce répertoire contient les fichiers à déployer sur GitHub Pages.
 
 ## Comment déployer sur GitHub Pages
-
-1. Créez un dépôt GitHub (ou utilisez le dépôt existant alicedubois159/bot2)
 2. Téléchargez tous ces fichiers dans le dépôt
 3. Dans les paramètres du dépôt GitHub, activez GitHub Pages sur la branche main
 4. Configurez les secrets GitHub pour l'accès à Airtable (voir ci-dessous)
@@ -30,18 +28,3 @@ Cette application récupère les données d'Airtable de deux façons:
 - **data/** - Dossier contenant les données JSON actualisées depuis Airtable
 - **data_updater.js** - Script pour actualiser les données
 - **.github/workflows/** - Configuration de l'actualisation automatique
-
-## Développement local
-
-Pour tester l'application en local:
-
-1. Installez Node.js et npm
-2. Exécutez `npm install` pour installer les dépendances
-3. Créez un fichier `.env` avec vos clés Airtable:
-   ```
-   AIRTABLE_API_KEY=patyDPr6vjdTh9Jyc.59ab6205d522d9c00dcc41bf603f007cfd1792abae4b4cd740790261f3905429
-   AIRTABLE_BASE_ID=appSCgIw9WWJq4N27
-   AIRTABLE_TABLE_NAME=Plantes
-   ```
-4. Exécutez `npm run update-data` pour générer le fichier `data/data.json`
-5. Utilisez un serveur local comme `live-server` ou `http-server` pour servir les fichiers 

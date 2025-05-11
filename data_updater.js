@@ -113,6 +113,7 @@ async function fetchDataFromAirtable() {
 }
 
 // Fonction pour enregistrer les données dans un fichier JSON
+// Fonction pour enregistrer les données dans un fichier JSON
 async function saveDataToFile(data) {
   console.log('Enregistrement des données dans un fichier JSON...');
   
@@ -132,9 +133,25 @@ async function saveDataToFile(data) {
     console.log(`Sauvegarde créée: ${backupFilePath}`);
   }
   
-  // Enregistrer les nouvelles données
-  fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
-  console.log(`Données enregistrées dans ${dataFilePath}`);
+  try {
+    // Convertir en chaîne JSON puis valider en reparsant
+    const jsonString = JSON.stringify(data, null, 2);
+    JSON.parse(jsonString); // Si cette ligne échoue, le JSON est invalide
+    
+    // Enregistrer sans BOM en spécifiant explicitement l'encodage UTF-8
+    fs.writeFileSync(dataFilePath, jsonString, { encoding: 'utf8' });
+    
+    // Vérification supplémentaire : s'assurer que le fichier commence par {
+    const firstChar = fs.readFileSync(dataFilePath, { encoding: 'utf8' }).charAt(0);
+    if (firstChar !== '{') {
+      throw new Error(`Le fichier JSON ne commence pas par { mais par "${firstChar}"`);
+    }
+    
+    console.log(`Données enregistrées dans ${dataFilePath}`);
+  } catch (error) {
+    console.error('Erreur lors de l\'enregistrement du JSON:', error.message);
+    throw error;
+  }
 }
 
 // Fonction principale

@@ -773,7 +773,7 @@
         
         // Fonction pour vérifier les mises à jour en arrière-plan
         function checkForUpdates() {
-            fetch(`/api/data.json?_=${Date.now()}`)
+            fetch(`/data/data.json?_=${Date.now()}`)
                 .then(response => response.json())
                 .then(updateInfo => {
                     // Désactivation de l'affichage visuel de la notification

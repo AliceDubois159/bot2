@@ -46,7 +46,7 @@ window.addEventListener('click', function(event) {
 let tg = window.Telegram.WebApp;
 
 // URL de l'API pour charger les données
-const API_URL = './data/data.json';
+const API_URL = '/bot2/data/data.json';
 console.log("URL de l'API configurée:", API_URL);
 
 // Données de secours en cas d'échec de chargement depuis l'API

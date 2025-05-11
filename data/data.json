@@ -17,7 +17,13 @@
       "categorie": "Hash Moroco",
       "provenance": "Farm 1",
       "image": null,
-      "prix": {},
+      "prix": {
+        "5g": 60,
+        "10g": 100,
+        "25g": 220,
+        "50g": 350,
+        "100g": 650
+      },
       "videos": [],
       "description": "FF 45,\n220/73µ\n"
     },
@@ -28,7 +34,13 @@
       "categorie": "Hash Moroco",
       "provenance": "Farm 1",
       "image": null,
-      "prix": {},
+      "prix": {
+        "5g": 70,
+        "10g": 110,
+        "25g": 250,
+        "50g": 450,
+        "100g": 850
+      },
       "videos": [],
       "description": ""
     },
@@ -39,7 +51,16 @@
       "categorie": "Weed Spain",
       "provenance": "Farm 2",
       "image": null,
-      "prix": {},
+      "prix": {
+        "3.5g": 40,
+        "10g": 110,
+        "25g": 250,
+        "50g": 400,
+        "100g": 700,
+        "500g": 3000,
+        "1kg": 5000,
+        "2kg": 9000
+      },
       "videos": [],
       "description": "Moroccan Peaches, 220/90µ"
     }

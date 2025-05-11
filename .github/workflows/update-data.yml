@@ -28,7 +28,14 @@ jobs:
           npm install dotenv
           
       - name: Update data from Airtable
-        run: node data_updater.js
+        run: |
+          node data_updater.js
+          # Vérifier que le JSON est valide
+          cat data/data.json | jq . > /dev/null
+          if [ $? -ne 0 ]; then
+            echo "Erreur: JSON invalide"
+            exit 1
+          fi
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}

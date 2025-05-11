@@ -2,12 +2,14 @@
   "categories": [
     "Toutes les catégories",
     "Hash Moroco",
-    "Weed Spain"
+    "Weed Spain",
+    "Weed Us"
   ],
   "provenances": [
     "Toutes les provenances",
     "Farm 1",
-    "Farm 2"
+    "Farm 2",
+    "Farm 3"
   ],
   "plantes": [
     {
@@ -42,6 +44,17 @@
       "prix": {},
       "videos": [],
       "description": "Moroccan Peaches, 220/90µ"
+    },
+    {
+      "id": "recmqXBFGaXXVcYTt",
+      "nom": "test",
+      "type": "test",
+      "categorie": "Weed Us",
+      "provenance": "Farm 3",
+      "image": null,
+      "prix": {},
+      "videos": [],
+      "description": ""
     }
   ]
 }

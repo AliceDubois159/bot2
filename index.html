@@ -623,7 +623,7 @@
                 // 2. Nombre aléatoire pour être absolument sûr
                 const randomValue = Math.random().toString(36).substring(2, 15);
                 // 3. Combinaison unique pour chaque requête
-                const uniqueUrl = `./data/sata.json?nocache=${timestamp}&rnd=${randomValue}&force=true&debug=true`;
+                const uniqueUrl = `./data/data.json?nocache=${timestamp}&rnd=${randomValue}&force=true&debug=true`;
                 
                 console.log(`🔄 Chargement des données depuis: ${uniqueUrl}`);
                 
@@ -738,7 +738,7 @@
                         refreshButton.disabled = true;
                         
                         // Forcer une requête vers l'API server pour recharger les données depuis Airtable
-                        fetch(`./data/sata.json?force=true&purge=true&time=${new Date().getTime()}`, {
+                        fetch(`./data/data.json?force=true&purge=true&time=${new Date().getTime()}`, {
                             method: 'GET',
                             headers: {
                                 'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -773,7 +773,7 @@
         
         // Fonction pour vérifier les mises à jour en arrière-plan
         function checkForUpdates() {
-            fetch(`/data/sata.json?_=${Date.now()}`)
+            fetch(`/data/data.json?_=${Date.now()}`)
                 .then(response => response.json())
                 .then(updateInfo => {
                     // Désactivation de l'affichage visuel de la notification
@@ -842,7 +842,7 @@
                 // Désactiver la mise en cache des réponses HTTP
                 // Ajouter un timestamp unique à chaque requête pour empêcher le cache
                 const timestamp = new Date().getTime();
-                const uniqueUrl = `./data/sata.json?nocache=${timestamp}&rnd=${Math.random()}`;
+                const uniqueUrl = `./data/data.json?nocache=${timestamp}&rnd=${Math.random()}`;
                 
                 fetch(uniqueUrl, {
                     method: 'GET',
@@ -1072,7 +1072,7 @@
                 if (plants.length === 0) {
                     console.warn("⚠️ Aucun produit disponible - Essai de rechargement forcé des données");
                     // Tenter de recharger les données depuis le serveur
-                    fetch('./data/sata.json?force=true&time=' + new Date().getTime(), {
+                    fetch('./data/data.json?force=true&time=' + new Date().getTime(), {
                         method: 'GET',
                         headers: {
                             'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -1504,7 +1504,7 @@
                         console.log("Tous les caches ont été supprimés");
                         
                         // Requête pour forcer l'API à rafraîchir ses données
-                        return fetch('./data/sata.json?force=true&clearcache=true&time=' + new Date().getTime(), {
+                        return fetch('./data/data.json?force=true&clearcache=true&time=' + new Date().getTime(), {
                             method: 'GET',
                             headers: {
                                 'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',

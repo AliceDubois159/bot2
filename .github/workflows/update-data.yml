@@ -6,7 +6,9 @@ on:
     - cron: '0 * * * *'
   # Permettre d'exécuter manuellement depuis l'interface GitHub
   workflow_dispatch:
-
+  
+permissions:
+  contents: write
 jobs:
   update-data:
     runs-on: ubuntu-latest

@@ -1,0 +1,40 @@
+name: Update Airtable Data
+
+on:
+  schedule:
+    # Exécuter toutes les heures
+    - cron: '0 * * * *'
+  # Permettre d'exécuter manuellement depuis l'interface GitHub
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          npm install axios
+          npm install dotenv
+          
+      - name: Update data from Airtable
+        run: node data_updater.js
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_TABLE_NAME: 'Plantes'
+          
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add data/data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualisation automatique des données Airtable" && git push)

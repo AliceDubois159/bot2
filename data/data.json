@@ -24,7 +24,9 @@
         "50g": 350,
         "100g": 650
       },
-      "videos": [],
+      "videos": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746972000000/NRvliushXrTTFdOf7ex5hQ/jlbWGYigECAdGguv_6-PWAxhBjB_wzJ5fvedYflbhHdNOSo7CqTEDmAgkiSrksLSuIIvZX7Ny5RRsDQI-R0oO2JD91obkgdK4vWmRobtM5kMtveiJaZvHgwLRk8KzbNmr7G8BrveAroap9rYjruXWA6ifQCWhiSYbzwI7HW-47U/mYPjWNWih_NwrDr8q8-vvQipEAbSy6V9DiS879e6FBY"
+      ],
       "description": "FF 45,\n220/73µ\n"
     },
     {
@@ -41,7 +43,9 @@
         "50g": 450,
         "100g": 850
       },
-      "videos": [],
+      "videos": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746972000000/c-slXRS_rVvIiB4OVcRcHQ/7HrByPj6GEBDybQy4qtlgpsdkJptrS_1jd22iQl08oB04z5_EAzpXJ8uYfRn5o_vb4X4pYXXiw5Ae1DiABnESbwQr3pkNo4BHeAXPeNoqg9MzVuiBjIAn6ftTVhg7ZvdnXXV2Nw2qPerSXhQj8ZbFRlzbZYh0DNSpvQgBMab4_o/T7T0T6BoatbrlNPe1bnTlvyVHtCP1SOkeCEWRK6SWek"
+      ],
       "description": ""
     },
     {
@@ -61,7 +65,9 @@
         "1kg": 5000,
         "2kg": 9000
       },
-      "videos": [],
+      "videos": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746972000000/DAJ3a9179kJqsbXCwwcPuQ/haeDyxs5PLeyktQ2TA7UiqieT5lV2UYMHYCwQoM20eCK126yiScj7OZDTGEzmRGhibtx795pktcpKo33-JV-Un15CUi2r9iugDQLZ-ygmidzfpqxS7NG-SL38mLyNKr_Uh3lMKSu5BYkGUEfImA7PaBHeRpxTqN89Gz01KCVKpw/gemABylszlGrQwJbYOIIFkQCplkNY_4SrlzUNK5HexE"
+      ],
       "description": "Moroccan Peaches, 220/90µ"
     }
   ]

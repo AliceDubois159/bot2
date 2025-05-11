@@ -1,0 +1,88 @@
+{
+  "categories": [
+    "Hash Moroco",
+    "Toutes les catégories",
+    "Weed Spain"
+  ],
+  "provenances": [
+    "Farm 1",
+    "Farm 2",
+    "Toutes les provenances"
+  ],
+  "plantes": [
+    {
+      "id": "recANc87qPt0NMNao",
+      "nom": "Ff X ?",
+      "type": "Hash",
+      "categorie": "Hash Moroco",
+      "provenance": "Farm 1",
+      "image": "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/5TVlD2kaCtjTWyGRbifIyA/sz5ep7LvTj-dIDCwXDmSAhHP5XhQClAZaKNPpOlK6WzmiSUnI0ExKa_9I3TfE6YD_fdUJj2JdMbdaxRneg-Z43RyBsTM8ZgSEM3L0eROnDk2cfiQQeU0LmU5Exo6G29r3YKBxS9L63POFBN08Ild4HY1Z6cfDiOIAHYLIdPi1EnXTnsdAe8WKKQbyY9Ej9nh/vuHp0dvGUkxSf6UrJaJu2GSJoC_HTEGrqoTD2ETDrcA",
+      "images": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/5TVlD2kaCtjTWyGRbifIyA/sz5ep7LvTj-dIDCwXDmSAhHP5XhQClAZaKNPpOlK6WzmiSUnI0ExKa_9I3TfE6YD_fdUJj2JdMbdaxRneg-Z43RyBsTM8ZgSEM3L0eROnDk2cfiQQeU0LmU5Exo6G29r3YKBxS9L63POFBN08Ild4HY1Z6cfDiOIAHYLIdPi1EnXTnsdAe8WKKQbyY9Ej9nh/vuHp0dvGUkxSf6UrJaJu2GSJoC_HTEGrqoTD2ETDrcA"
+      ],
+      "prix": {
+        "5g": "60€",
+        "10g": "100€",
+        "25g": "220€",
+        "50g": "350€",
+        "100g": "650€"
+      },
+      "videos": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/wNFAC-QG8cAzTHaboaveSQ/Nlg7jLjtEk9nj1f5NW06XeQpF4N3NXP724V-_TJd0BIWxrHTVdtfFFz5-TDtkkObDsyWbVje_YZ7Z0qI8s3sqM1KaW1dIl1EWScwXRD6mY4ZZzu_mrVt4RzGuT4c0wCWCALgDi7wSu_MehI-vxkmsa-WDkhy6aXahg-UpqfYaM0/80qMxEQjHSeQ8u3Bh04gpzeiCZzVm1UGDGHvtyiaizA"
+      ],
+      "description": "FF 45,\n220/73µ\n"
+    },
+    {
+      "id": "recGHtgifYl0GFQkR",
+      "nom": "VVS",
+      "type": "Hash",
+      "categorie": "Hash Moroco",
+      "provenance": "Farm 1",
+      "image": null,
+      "images": [],
+      "prix": {
+        "5g": "70€",
+        "10g": "110€",
+        "25g": "250€",
+        "50g": "450€",
+        "100g": "850€"
+      },
+      "videos": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/6I0L2QnWWudfWo2DvqVaEw/XF--vz0RzlzdO_I23ahHNM0BxLHgFntuELk6QzYx2WcaSfiG70a5AtUhkBWhJcmaqmL6Me3vTmG26G9ZLRWYyYW-YDt2GU2w28lwLTlnH9H12Ioex9JwXFFEZgrz0FsW5HYSh4cbsXA9khagKBmUA7tGuFJNVaZrqAaKRNjWI2I/WdANH7Zsl0vka1F7UYqt87U1ipigsGDH5FYmqZOPjJg"
+      ],
+      "description": ""
+    },
+    {
+      "id": "recc1dOpI9IZs3uzL",
+      "nom": "Cali Spain",
+      "type": "Weed",
+      "categorie": "Weed Spain",
+      "provenance": "Farm 2",
+      "image": "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/vZaSNyfE36TPYri1eugqrw/foZrrtIQQHZX-KqWTsRmgiYmwdLOf6012Jkg8GT-45IzzGGGr5ofEGnu0od2q0bpfl3OvpBb1fCZT779WgO9AHs_TUBnjajIavSMeBcPhOEovKHckjnv7j4j-bIhY8qcagMJxzIqjf9quUcgN0MnAY8eOlxa6X6t91gcRrZ22IHawbkSmNugDSBgHbBlA3fk/7dX0ugQdclNUTydkJGpGIhMHN4wk6QX3HBgQFPhHVX8",
+      "images": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/vZaSNyfE36TPYri1eugqrw/foZrrtIQQHZX-KqWTsRmgiYmwdLOf6012Jkg8GT-45IzzGGGr5ofEGnu0od2q0bpfl3OvpBb1fCZT779WgO9AHs_TUBnjajIavSMeBcPhOEovKHckjnv7j4j-bIhY8qcagMJxzIqjf9quUcgN0MnAY8eOlxa6X6t91gcRrZ22IHawbkSmNugDSBgHbBlA3fk/7dX0ugQdclNUTydkJGpGIhMHN4wk6QX3HBgQFPhHVX8"
+      ],
+      "prix": {
+        "3.5g": "40€",
+        "10g": "110€",
+        "25g": "250€",
+        "50g": "400€",
+        "100g": "700€",
+        "500g": "3000€",
+        "1kg": "5000€",
+        "2kg": "9000€"
+      },
+      "videos": [
+        "https://v5.airtableusercontent.com/v3/u/40/40/1746950400000/5HyR2iVlOXvecX9QsQfUng/OOpQWDGG-YVnsPC8ZpqGUJ-l1CZ3YFal4wkFZ9sdF2GMX8dNuiXSvHc0ye9zIDnPbahOsrzYMNGw3IjI-4hSFUHAUXyQrgaYHVeT-XaUmCjHmd1P75IJvhG0GKpQHPZ1cJSUY3pf0JmJ4J95h9M8PBbxeDhZaRYJ-PRA2o1Oajo/SUsjUNyfg7vL-luzAFQZ0hTj1jL0XD42x1kIAiwVtqM"
+      ],
+      "description": "Moroccan Peaches, 220/90µ"
+    }
+  ],
+  "timestamp_generation": 1746940546854,
+  "filtered": true,
+  "purged": true,
+  "timestamp": 1746940546854,
+  "refreshed_at": "2025-05-11 07:15:46",
+  "auto_refreshed": true,
+  "plants_count": 3
+}

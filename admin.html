@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration des Plantes</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <h1>Administration des Plantes</h1>
+    
+    <div class="section">
+        <h2>Guide d'utilisation d'Airtable</h2>
+        <p>Ce guide vous explique comment utiliser Airtable pour gérer votre catalogue de plantes.</p>
+        
+        <h3>Configuration initiale</h3>
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Créez un compte Airtable</strong>: Rendez-vous sur <a href="https://airtable.com" target="_blank">airtable.com</a> et créez un compte gratuit si vous n'en avez pas déjà un.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Créez une nouvelle base</strong>: Nommez-la, par exemple, "Catalogue de Plantes".
+        </div>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Créez une table "Plantes"</strong>: Cette table contiendra toutes les informations sur vos plantes.
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Structure de la table Plantes</h2>
+        <p>Voici les champs à créer dans votre table Plantes:</p>
+        
+        <ul>
+            <li><strong>Nom</strong> (Type: Texte simple)</li>
+            <li><strong>Type</strong> (Type: Texte simple)</li>
+            <li><strong>Catégorie</strong> (Type: Sélection simple) - Ajoutez toutes vos catégories</li>
+            <li><strong>Provenance</strong> (Type: Sélection simple) - Ajoutez toutes vos provenances</li>
+            <li><strong>Image</strong> (Type: Pièce jointe) - Pour télécharger des images</li>
+            <li><strong>Prix Unité</strong> (Type: Texte simple)</li>
+            <li><strong>Prix par 3</strong> (Type: Texte simple)</li>
+            <li><strong>Prix par 5</strong> (Type: Texte simple)</li>
+            <li><strong>Vidéos</strong> (Type: Texte long) - Entrez les URLs des vidéos, une par ligne</li>
+            <li><strong>Description</strong> (Type: Texte long)</li>
+        </ul>
+        
+        <div class="tip">
+            <p><strong>Astuce:</strong> Vous pouvez ajouter d'autres champs selon vos besoins.</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Ajouter et gérer les plantes</h2>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Ajouter une plante</strong>: Cliquez sur le "+" au début d'une ligne pour ajouter une nouvelle plante.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Télécharger une image</strong>: Dans le champ Image, cliquez pour télécharger une image depuis votre téléphone ou ordinateur.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Ajouter des vidéos</strong>: Dans le champ Vidéos, entrez les URLs de vos vidéos, une par ligne.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Modifier une plante</strong>: Cliquez simplement sur n'importe quel champ pour le modifier.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>Supprimer une plante</strong>: Cliquez sur les trois points à droite de la ligne et sélectionnez "Supprimer".
+        </div>
+        
+        <div class="tip">
+            <p><strong>Astuce:</strong> Toutes les modifications sont sauvegardées automatiquement, et votre bot Telegram sera mis à jour automatiquement (le délai de mise à jour est configuré dans les paramètres du bot).</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Obtenir les informations API</h2>
+        <p>Pour que votre bot Telegram puisse se connecter à Airtable, vous aurez besoin des informations suivantes:</p>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Trouver votre API Key</strong>: Allez dans votre <a href="https://airtable.com/account" target="_blank">compte Airtable</a>, section "API", et générez une clé API si vous n'en avez pas.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Trouver votre Base ID</strong>: Ouvrez votre base, cliquez sur "Aide" dans le coin supérieur droit, puis "API Documentation". Votre Base ID se trouve en haut de la page.
+        </div>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Configurer votre fichier .env</strong>: Utilisez ces informations pour mettre à jour votre fichier .env avec les variables AIRTABLE_API_KEY, AIRTABLE_BASE_ID et AIRTABLE_TABLE_NAME.
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Liens utiles</h2>
+        <ul>
+            <li><a href="https://airtable.com/login" target="_blank">Se connecter à Airtable</a></li>
+            <li><a href="https://support.airtable.com/docs" target="_blank">Documentation Airtable</a></li>
+            <li><a href="https://airtable.com/developers/web/api/introduction" target="_blank">Documentation API Airtable</a></li>
+        </ul>
+    </div>
+    
+    <a href="index.html" class="button">Retour à l'application</a>
+</body>
+</html> 

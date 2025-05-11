@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LaCocina - Catalogue</title>
+    <!-- Ajout de méta-tags pour désactiver le cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Intégration du SDK Telegram Mini Apps -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Styles généraux */
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #34312d;
+            --dark-bg: #1c1c1c;
+            --card-bg: #2a2a2a;
+            --text-color: #ffffff;
+            --accent-color: #ef6337;
+        }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overscroll-behavior: none;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            padding-bottom: 60px;
+        }
+        
+        /* En-tête avec logo */
+        .header {
+            text-align: center;
+            padding: 15px 0;
+            position: relative;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: block;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .logo-text {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 8px;
+            color: var(--text-color);
+        }
+        
+        /* Bouton de rafraîchissement - À SUPPRIMER */
+        .refresh-container {
+            display: none; /* Masquer complètement */
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .refresh-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .refresh-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .refresh-timestamp {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        /* Filtres */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 12px 15px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .filter-btn::after {
+            content: "▼";
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        /* Grille de produits */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            position: relative;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Styles pour les vidéos dans les cartes de produits */
+        .product-video-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
+        }
+        
+        .product-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .product-info {
+            padding: 12px;
+        }
+        
+        .product-name {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .product-type {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        /* Détail d'un produit */
+        .product-detail {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--dark-bg);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 10px; /* Réduction du padding pour maximiser l'espace */
+            flex-direction: column;
+        }
+        
+        .product-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px; /* Réduction de la marge */
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .product-detail-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .product-detail-video {
+            width: 100%;
+            margin-bottom: 15px; /* Réduction de la marge */
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 50vh; /* Réduction de 60vh à 50vh */
+            min-height: 450px; /* Réduction de la hauteur minimale de 500px à 450px */
+            background-color: #000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Ajout d'une ombre pour mettre en valeur */
+        }
+        
+        .product-detail-video video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Changement de contain à cover pour remplir toute la surface */
+            border-radius: 10px;
+            background-color: #000;
+        }
+        
+        /* Ajout d'un bouton pour changer le mode d'affichage */
+        .video-display-toggle {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            z-index: 10;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .video-display-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .product-detail-info {
+            margin-bottom: 15px; /* Réduction de la marge */
+        }
+        
+        .product-detail-info h3 {
+            color: var(--primary-color);
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .price-section {
+            margin-top: 20px;
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .contact-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        
+        /* Popups pour les filtres */
+        .filter-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .filter-dropdown.show {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .filter-option {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .filter-option:last-child {
+            border-bottom: none;
+        }
+        
+        .filter-option:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .filter-option.selected {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        /* Overlay pour fermer les popups */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 90;
+        }
+        
+        .overlay.show {
+            display: block;
+        }
+        
+        /* Debug */
+        .debug-box {
+            display: none; /* Masquer le debug-box */
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            color: white;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 80;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer; /* Ajout du curseur pointer */
+        }
+        
+        .nav-item.active {
+            color: var(--accent-color);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* Style pour le bouton d'urgence */
+        .emergency-btn {
+            background-color: #E74C3C;
+            margin-top: 10px;
+        }
+
+        .emergency-btn:hover {
+            background-color: #C0392B;
+        }
+
+        /* Style pour les modales d'info et de contact */
+        .modal-info, .modal-contact {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            position: relative;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            margin: 50px auto;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            color: var(--accent-color);
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .modal-body {
+            margin-top: 20px;
+        }
+        
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .contact-link:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .contact-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header avec logo -->
+        <div class="header">
+            <div class="logo">
+                <img src="img/Sans titre2.jpeg" alt="La Cocina" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+            </div>
+            <div class="logo-text">LaCocina</div>
+        </div>
+        
+        <!-- Debug message - masqué -->
+        <div class="debug-box" id="debug-info" style="display: none;">Chargement des données...</div>
+        
+        <!-- Filtres -->
+        <div class="filters">
+            <div class="filter-wrapper" style="position: relative; flex: 1;">
+                <button class="filter-btn" id="categories-filter">Toutes les catégories</button>
+                <div class="filter-dropdown" id="categories-dropdown">
+                    <!-- Options injectées par JavaScript -->
+                </div>
+            </div>
+            
+            <div class="filter-wrapper" style="position: relative; flex: 1;">
+                <button class="filter-btn" id="provenance-filter">Toutes les provenances</button>
+                <div class="filter-dropdown" id="provenance-dropdown">
+                    <!-- Options injectées par JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bouton de rafraîchissement - masqué -->
+        <div class="refresh-container" style="display: none;">
+            <div class="refresh-timestamp" id="refresh-timestamp">Dernière mise à jour: Jamais</div>
+            <button id="emergency-refresh" class="refresh-btn emergency-btn">🧹 Vider cache et recharger</button>
+        </div>
+        
+        <!-- Overlay pour fermer les menus -->
+        <div class="overlay" id="filter-overlay"></div>
+        
+        <!-- Grille de produits -->
+        <div class="products-grid" id="products-container">
+            <!-- Les produits seront injectés ici par JavaScript -->
+        </div>
+        
+        <!-- Détail d'un produit -->
+        <div class="product-detail" id="product-detail">
+            <div class="product-detail-header">
+                <button class="back-btn" id="back-btn">&larr;</button>
+                <h2 id="detail-title">Nom du produit</h2>
+            </div>
+            
+            <!-- Déplacer le conteneur vidéo au-dessus de l'image -->
+            <div id="detail-video-container" class="product-detail-video">
+                <!-- Vidéo sera chargée ici -->
+            </div>
+            
+            <img id="detail-image" class="product-detail-image" src="" alt="">
+            
+            <div class="product-detail-info">
+                <h3>Description</h3>
+                <p id="detail-description">Description du produit...</p>
+                
+                <div class="price-section">
+                    <h3>Prix</h3>
+                    <!-- Les prix seront ajoutés dynamiquement via JavaScript -->
+                </div>
+                
+                <button class="contact-btn" id="contact-btn">Commander</button>
+            </div>
+        </div>
+        
+        <!-- Barre de navigation -->
+        <div class="navbar">
+            <div class="nav-item active" id="nav-home">
+                <div class="nav-icon">🏠</div>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" id="nav-info">
+                <div class="nav-icon">ℹ️</div>
+                <span>Infos</span>
+            </div>
+            <div class="nav-item" id="nav-contact">
+                <div class="nav-icon">📞</div>
+                <span>Contact</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script>
+        // Variables globales
+        let plants = [];
+        let selectedCategory = null;
+        let selectedType = null;
+        
+        // Initialiser Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.expand();
+        }
+        
+        // Charger les données avec anti-cache renforcé
+        async function loadData() {
+            try {
+                // Empêcher la mise en cache des données à plusieurs niveaux
+                // 1. Timestamp précis en millisecondes
+                const timestamp = new Date().getTime();
+                // 2. Nombre aléatoire pour être absolument sûr
+                const randomValue = Math.random().toString(36).substring(2, 15);
+                // 3. Combinaison unique pour chaque requête
+                const uniqueUrl = `./api/data.json?nocache=${timestamp}&rnd=${randomValue}&force=true&debug=true`;
+                
+                console.log(`🔄 Chargement des données depuis: ${uniqueUrl}`);
+                
+                const response = await fetch(uniqueUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    },
+                    cache: 'no-store' // S'assurer que le navigateur ne met pas en cache
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                // MODE URGENCE: Afficher les données brutes pour diagnostic
+                console.log("📊 Données brutes reçues:", data);
+                
+                // Vérifier si nous avons des plantes
+                if (!data.plantes || !Array.isArray(data.plantes)) {
+                    console.error("❌ ERREUR: Les données ne contiennent pas de tableau 'plantes'");
+                    
+                    // Tenter de récupérer depuis le localStorage en cas d'urgence
+                    const cachedData = localStorage.getItem('plantsBackup');
+                    if (cachedData) {
+                        console.warn("⚠️ Tentative de récupération depuis le cache local");
+                        try {
+                            const parsedCache = JSON.parse(cachedData);
+                            if (parsedCache && Array.isArray(parsedCache) && parsedCache.length > 0) {
+                                console.log(`✅ Récupération réussie: ${parsedCache.length} plantes depuis le cache local`);
+                                plants = parsedCache;
+                                renderPlants();
+                                return true;
+                            }
+                        } catch (e) {
+                            console.error("❌ Échec de récupération depuis le cache:", e);
+                        }
+                    }
+                    
+                    return false;
+                }
+                
+                console.log(`📋 Données reçues du serveur: ${data.plantes.length} plantes`);
+                
+                // Afficher une notification si les données ont été auto-actualisées
+                if (data.auto_refreshed) {
+                    // Désactivation de la notification visuelle
+                    /*
+                    const refreshMessage = document.getElementById('debug-info');
+                    refreshMessage.textContent = `✅ Données actualisées automatiquement depuis Airtable (${data.refreshed_at})`;
+                    refreshMessage.style.display = 'block';
+                    refreshMessage.style.backgroundColor = '#4CAF50';
+                    refreshMessage.style.color = 'white';
+                    
+                    // Masquer après 5 secondes
+                    setTimeout(() => {
+                        refreshMessage.style.display = 'none';
+                    }, 5000);
+                    */
+                    // Consigner uniquement dans la console
+                    console.log(`✅ Données actualisées automatiquement depuis Airtable (${data.refreshed_at})`);
+                }
+                
+                // Filtrage minimal - uniquement retirer les entrées explicitement nommées "Sans nom"
+                if (data.plantes.length > 0) {
+                    // Sauvegarde de sécurité dans le localStorage
+                    localStorage.setItem('plantsBackup', JSON.stringify(data.plantes));
+                    
+                    // Filtre très simple - garder tout sauf "Sans nom"
+                    plants = data.plantes.filter(p => p && p.nom !== 'Sans nom');
+                    
+                    console.log(`📊 Après filtrage minimal: ${plants.length} plantes conservées`);
+                    
+                    // Liste complète des noms après filtrage pour débogage
+                    const plantNames = plants.map(p => p.nom);
+                    console.log("📝 Noms des plantes après filtrage:", plantNames);
+                } else {
+                    console.error("❌ ERREUR: Aucune plante dans les données reçues");
+                    plants = [];
+                }
+                
+                // Afficher le nombre de produits chargés
+                console.log(`✅ Chargement terminé: ${plants.length} produits`);
+                
+                // Mettre à jour les statistiques
+                let productsWithImages = plants.filter(p => p.image).length;
+                let productsWithVideos = plants.filter(p => p.videos && p.videos.length > 0).length;
+                
+                console.log(`📊 Statistiques: ${productsWithImages} produits avec images, ${productsWithVideos} produits avec vidéos`);
+                
+                // Mettre à jour le timestamp de rafraîchissement
+                if (data.timestamp) {
+                    const date = new Date(data.timestamp);
+                    document.getElementById('refresh-timestamp').textContent = 
+                        `Dernière mise à jour: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+                }
+                
+                // Ajouter un bouton de rafraîchissement manuel s'il n'existe pas déjà
+                if (!document.getElementById('refresh-button')) {
+                    const refreshContainer = document.querySelector('.refresh-container');
+                    const refreshButton = document.createElement('button');
+                    refreshButton.id = 'refresh-button';
+                    refreshButton.className = 'refresh-btn';
+                    refreshButton.textContent = '🔄 Rafraîchir les données';
+                    refreshButton.addEventListener('click', () => {
+                        console.log("🔄 Rafraîchissement manuel des données...");
+                        refreshButton.textContent = '⏳ Chargement...';
+                        refreshButton.disabled = true;
+                        
+                        // Forcer une requête vers l'API server pour recharger les données depuis Airtable
+                        fetch(`./api/data.json?force=true&purge=true&time=${new Date().getTime()}`, {
+                            method: 'GET',
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                                'Pragma': 'no-cache'
+                            },
+                            cache: 'no-store'
+                        })
+                        .then(() => {
+                            setTimeout(() => {
+                                window.location.reload(true); // Force le rechargement sans cache
+                            }, 1000);
+                        })
+                        .catch(err => {
+                            console.error("❌ Erreur lors du rafraîchissement des données:", err);
+                            refreshButton.textContent = '❌ Échec du rafraîchissement';
+                            setTimeout(() => {
+                                refreshButton.textContent = '🔄 Rafraîchir les données';
+                                refreshButton.disabled = false;
+                            }, 2000);
+                        });
+                    });
+                    refreshContainer.appendChild(refreshButton);
+                }
+                
+                renderPlants();
+                return true;
+            } catch (error) {
+                console.error('❌ Erreur lors du chargement des données:', error);
+                return false;
+            }
+        }
+        
+        // Fonction pour vérifier les mises à jour en arrière-plan
+        function checkForUpdates() {
+            fetch(`/api/data.json?_=${Date.now()}`)
+                .then(response => response.json())
+                .then(updateInfo => {
+                    // Désactivation de l'affichage visuel de la notification
+                    // debugInfo.textContent = `🔄 Données mises à jour automatiquement depuis Airtable (${updateInfo.updated_at})`;
+                    // debugInfo.style.display = 'block';
+                    // setTimeout(() => {
+                    //     debugInfo.style.display = 'none';
+                    // }, 3000);
+                    
+                    // Log en console uniquement
+                    console.log(`🔄 Données mises à jour automatiquement depuis Airtable (${updateInfo.updated_at})`);
+                })
+                .catch(error => {
+                    console.warn("Erreur lors de la vérification des mises à jour:", error);
+                });
+        }
+        
+        // Configurer la vérification périodique des mises à jour (toutes les 30 secondes)
+        setInterval(checkForUpdates, 30000);
+        
+        // Configurer le rafraîchissement automatique des données (toutes les 2 minutes)
+        setInterval(loadData, 120000);
+        
+        // Script pour afficher les produits et gérer les interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Éléments DOM
+            const productsContainer = document.getElementById('products-container');
+            const categoriesFilter = document.getElementById('categories-filter');
+            const provenanceFilter = document.getElementById('provenance-filter');
+            const categoriesDropdown = document.getElementById('categories-dropdown');
+            const provenanceDropdown = document.getElementById('provenance-dropdown');
+            const overlay = document.getElementById('filter-overlay');
+            const debugInfo = document.getElementById('debug-info');
+            const productDetail = document.getElementById('product-detail');
+            const backBtn = document.getElementById('back-btn');
+            const contactBtn = document.getElementById('contact-btn');
+            
+            // Initialiser l'intégration avec Telegram
+            let tg = window.Telegram?.WebApp;
+            
+            // Journalisation
+            function log(message) {
+                // Affichage en console uniquement
+                console.log(message);
+                
+                // Désactivation de l'affichage visuel des messages
+                // const debugInfo = document.getElementById('debug-info');
+                // debugInfo.textContent = message;
+                // debugInfo.style.display = 'block';
+                // setTimeout(() => {
+                //     debugInfo.style.display = 'none';
+                // }, 3000);
+            }
+            
+            log("Chargement des données depuis l'API...");
+            
+            // Variables pour les données
+            let categories = ["Toutes les catégories"];
+            let provenances = ["Toutes les provenances"];
+            let currentCategory = "Toutes les catégories";
+            let currentProvenance = "Toutes les provenances";
+            let currentProductId = null;
+            
+            // Fonction pour charger les données depuis l'API
+            function loadData() {
+                // Désactiver la mise en cache des réponses HTTP
+                // Ajouter un timestamp unique à chaque requête pour empêcher le cache
+                const timestamp = new Date().getTime();
+                const uniqueUrl = `./api/data.json?nocache=${timestamp}&rnd=${Math.random()}`;
+                
+                fetch(uniqueUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    },
+                    cache: 'no-store' // S'assurer que le navigateur ne met pas en cache
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors du chargement des données: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    log("Données chargées avec succès! Timestamp: " + new Date().toLocaleTimeString());
+                    console.log("Données reçues:", data);
+                    
+                    // Utiliser les données d'origine, telles quelles, sans modification
+                    if (Array.isArray(data.categories)) {
+                        categories = data.categories;
+                        // Assurons-nous que "Toutes les catégories" est en premier
+                        if (categories.includes("Toutes les catégories")) {
+                            categories = categories.filter(c => c !== "Toutes les catégories");
+                            categories.unshift("Toutes les catégories");
+                        } else if (!categories.includes("Toutes les catégories")) {
+                            categories.unshift("Toutes les catégories");
+                        }
+                    } else {
+                        log("Attention: Le format des catégories est incorrect");
+                        categories = ["Toutes les catégories"];
+                    }
+                    
+                    if (Array.isArray(data.provenances)) {
+                        provenances = data.provenances;
+                        // Assurons-nous que "Toutes les provenances" est en premier
+                        if (provenances.includes("Toutes les provenances")) {
+                            provenances = provenances.filter(p => p !== "Toutes les provenances");
+                            provenances.unshift("Toutes les provenances");
+                        } else if (!provenances.includes("Toutes les provenances")) {
+                            provenances.unshift("Toutes les provenances");
+                        }
+                    } else {
+                        log("Attention: Le format des provenances est incorrect");
+                        provenances = ["Toutes les provenances"];
+                    }
+                    
+                    products = data.plantes || [];
+                    
+                    // Afficher les informations sur le nombre de produits
+                    log(`${products.length} produit(s) chargé(s) depuis l'API`);
+                    
+                    // Afficher les informations sur les prix disponibles pour le débogage
+                    const allPriceKeys = new Set();
+                    products.forEach(product => {
+                        Object.keys(product.prix || {}).forEach(key => allPriceKeys.add(key));
+                    });
+                    log("Types de prix disponibles: " + Array.from(allPriceKeys).join(", "));
+                    
+                    // Remplir les menus déroulants
+                    populateDropdowns();
+                    
+                    // Afficher les produits
+                    renderProducts();
+                })
+                .catch(error => {
+                    log("Erreur: " + error.message + ". Tentative de chargement des données de secours...");
+                    
+                    // En cas d'erreur, utiliser les données de secours de data.js
+                    try {
+                        if (window.appData) {
+                            // Utiliser les données de secours telles quelles
+                            if (Array.isArray(window.appData.categories)) {
+                                categories = window.appData.categories;
+                                // Assurons-nous que "Toutes les catégories" est en premier
+                                if (categories.includes("Toutes les catégories")) {
+                                    categories = categories.filter(c => c !== "Toutes les catégories");
+                                    categories.unshift("Toutes les catégories");
+                                } else if (!categories.includes("Toutes les catégories")) {
+                                    categories.unshift("Toutes les catégories");
+                                }
+                            } else {
+                                log("Attention: Le format des catégories de secours est incorrect");
+                                categories = ["Toutes les catégories"];
+                            }
+                            
+                            if (Array.isArray(window.appData.provenances)) {
+                                provenances = window.appData.provenances;
+                                // Assurons-nous que "Toutes les provenances" est en premier
+                                if (provenances.includes("Toutes les provenances")) {
+                                    provenances = provenances.filter(p => p !== "Toutes les provenances");
+                                    provenances.unshift("Toutes les provenances");
+                                } else if (!provenances.includes("Toutes les provenances")) {
+                                    provenances.unshift("Toutes les provenances");
+                                }
+                            } else {
+                                log("Attention: Le format des provenances de secours est incorrect");
+                                provenances = ["Toutes les provenances"];
+                            }
+                            
+                            products = window.appData.plantes || [];
+                            
+                            log("Catégories de secours chargées: " + categories.join(", "));
+                            log("Provenances de secours chargées: " + provenances.join(", "));
+                            
+                            // Remplir les menus déroulants
+                            populateDropdowns();
+                            
+                            // Afficher les produits
+                            renderProducts();
+                        } else {
+                            log("Erreur: données de secours non disponibles!");
+                        }
+                    } catch (e) {
+                        log("Erreur critique lors du chargement des données: " + e.message);
+                    }
+                });
+            }
+            
+            // Charger les données au démarrage
+            loadData();
+            
+            // Remplir les menus déroulants
+            function populateDropdowns() {
+                // Catégories
+                categoriesDropdown.innerHTML = '';
+                categories.forEach(category => {
+                    const option = document.createElement('div');
+                    option.className = 'filter-option' + (category === currentCategory ? ' selected' : '');
+                    option.textContent = category;
+                    option.dataset.value = category;
+                    option.addEventListener('click', () => {
+                        selectCategory(category);
+                        toggleDropdown(categoriesDropdown, false);
+                    });
+                    categoriesDropdown.appendChild(option);
+                });
+                
+                // Provenances
+                provenanceDropdown.innerHTML = '';
+                provenances.forEach(provenance => {
+                    const option = document.createElement('div');
+                    option.className = 'filter-option' + (provenance === currentProvenance ? ' selected' : '');
+                    option.textContent = provenance;
+                    option.dataset.value = provenance;
+                    option.addEventListener('click', () => {
+                        selectProvenance(provenance);
+                        toggleDropdown(provenanceDropdown, false);
+                    });
+                    provenanceDropdown.appendChild(option);
+                });
+            }
+            
+            // Afficher ou masquer un menu déroulant
+            function toggleDropdown(dropdown, show) {
+                // Fermer tous les dropdowns d'abord
+                if (show) {
+                    document.querySelectorAll('.filter-dropdown').forEach(d => {
+                        d.classList.remove('show');
+                    });
+                }
+                
+                // Afficher ou masquer le dropdown spécifié
+                if (show === undefined) {
+                    dropdown.classList.toggle('show');
+                    overlay.classList.toggle('show', dropdown.classList.contains('show'));
+                } else {
+                    dropdown.classList.toggle('show', show);
+                    overlay.classList.toggle('show', show);
+                }
+            }
+            
+            // Sélectionner une catégorie
+            function selectCategory(category) {
+                currentCategory = category;
+                categoriesFilter.textContent = category;
+                renderProducts();
+                
+                // Mettre à jour la sélection visuelle
+                document.querySelectorAll('#categories-dropdown .filter-option').forEach(option => {
+                    option.classList.toggle('selected', option.dataset.value === category);
+                });
+            }
+            
+            // Sélectionner une provenance
+            function selectProvenance(provenance) {
+                currentProvenance = provenance;
+                provenanceFilter.textContent = provenance;
+                renderProducts();
+                
+                // Mettre à jour la sélection visuelle
+                document.querySelectorAll('#provenance-dropdown .filter-option').forEach(option => {
+                    option.classList.toggle('selected', option.dataset.value === provenance);
+                });
+            }
+            
+            // Fermer tous les menus déroulants
+            function closeAllDropdowns() {
+                document.querySelectorAll('.filter-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+                overlay.classList.remove('show');
+            }
+            
+            // Fonction pour afficher les produits selon les filtres actuels
+            function renderProducts() {
+                // Afficher un log détaillé avant l'affichage
+                console.warn("🔍 Début du rendu des produits");
+                console.log(`📊 Nombre total de plants: ${plants ? plants.length : 0}`);
+                if (plants && plants.length > 0) {
+                    console.log("📋 Premier produit:", plants[0]);
+                }
+                
+                // Vider le conteneur
+                productsContainer.innerHTML = '';
+                
+                // Vérification de sécurité - s'assurer que plants est bien un tableau
+                if (!plants || !Array.isArray(plants)) {
+                    console.error("❌ ERREUR CRITIQUE: la variable 'plants' n'est pas un tableau valide");
+                    productsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px; color: red; font-weight: bold;">ERREUR: Les données ne sont pas dans un format valide</p>';
+                    return;
+                }
+                
+                // Si plants est vide après toutes les vérifications, essayer de recharger les données
+                if (plants.length === 0) {
+                    console.warn("⚠️ Aucun produit disponible - Essai de rechargement forcé des données");
+                    // Tenter de recharger les données depuis le serveur
+                    fetch('./api/data.json?force=true&time=' + new Date().getTime(), {
+                        method: 'GET',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache'
+                        },
+                        cache: 'no-store'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.plantes && data.plantes.length > 0) {
+                            console.log(`✅ Données rechargées avec succès: ${data.plantes.length} produits`);
+                            plants = data.plantes;
+                            setTimeout(() => renderProducts(), 100); // Réessayer l'affichage après 100ms
+                            return;
+                        }
+                    })
+                    .catch(err => console.error("❌ Échec du rechargement des données:", err));
+                    
+                    productsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">Aucun produit disponible. Essayez de rafraîchir la page.</p>';
+                    return;
+                }
+                
+                // Filtrer les produits selon les filtres actuels
+                let filteredProducts = [...plants];
+                
+                // Log des filtres
+                console.log(`🔍 Filtrage - Catégorie: ${currentCategory}, Provenance: ${currentProvenance}`);
+                
+                if (currentCategory !== "Toutes les catégories") {
+                    filteredProducts = filteredProducts.filter(product => product.categorie === currentCategory);
+                }
+                
+                if (currentProvenance !== "Toutes les provenances") {
+                    filteredProducts = filteredProducts.filter(product => product.provenance === currentProvenance);
+                }
+                
+                console.log(`📊 Produits après filtrage: ${filteredProducts.length}`);
+                
+                // Afficher un message si aucun produit ne correspond
+                if (filteredProducts.length === 0) {
+                    productsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">Aucun produit ne correspond à ces critères</p>';
+                    return;
+                }
+                
+                // Créer une carte pour chaque produit
+                filteredProducts.forEach((product, index) => {
+                    try {
+                        // Vérification de sécurité
+                        if (!product) {
+                            console.error(`❌ Produit invalide à l'index ${index}`);
+                            return;
+                        }
+                        
+                        // Afficher l'ID et le nom pour débogage
+                        console.log(`🏷️ Rendu du produit: ${product.nom} (ID: ${product.id || 'inconnu'})`);
+                        
+                        // Créer la carte
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        
+                        // Déterminer l'image ou la vidéo à afficher
+                        let mediaContent = '';
+                        
+                        // Priorité à la vidéo si disponible
+                        if (product.videos && product.videos.length > 0) {
+                            const videoUrl = product.videos[0];
+                            console.log(`🎬 Produit avec vidéo: ${product.nom} - ${videoUrl}`);
+                            
+                            mediaContent = `
+                                <div class="product-video-container">
+                                    <video class="product-video" muted autoplay loop playsinline style="object-fit: cover; width: 100%; height: 100%;">
+                                        <source src="${videoUrl}" type="video/mp4">
+                                        Votre navigateur ne prend pas en charge les vidéos.
+                                    </video>
+                                </div>
+                            `;
+                        }
+                        // Sinon, utiliser l'image si disponible
+                        else if (product.image) {
+                            mediaContent = `<img src="${product.image}" alt="${product.nom || 'Produit'}" onerror="this.onerror=null; this.src='https://via.placeholder.com/200x200?text=Erreur'; console.log('Erreur de chargement d\\'image pour ${product.nom}');">`;
+                        }
+                        // Image par défaut si rien n'est disponible
+                        else {
+                            mediaContent = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background-color: #3a3a3a;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>`;
+                        }
+                        
+                        // Déterminer le label pour le tag
+                        let tagLabel = product.categorie || 'PRODUIT';
+                        
+                        // Construire la carte produit
+                        card.innerHTML = `
+                            <div class="product-image">
+                                ${mediaContent}
+                                <div class="tag">${tagLabel}</div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">${product.nom || 'Sans nom'}</h3>
+                                <p class="product-type">${product.provenance || 'Origine inconnue'}</p>
+                            </div>
+                        `;
+                        
+                        // Ajouter un événement de clic pour afficher les détails
+                        card.addEventListener('click', () => {
+                            showProductDetail(product);
+                        });
+                        
+                        // Ajouter la carte au conteneur
+                        productsContainer.appendChild(card);
+                        
+                        // Démarrer la lecture des vidéos
+                        if (product.videos && product.videos.length > 0) {
+                            setTimeout(() => {
+                                const videoElement = card.querySelector('video');
+                                if (videoElement) {
+                                    videoElement.play().catch(e => {
+                                        console.warn(`⚠️ Erreur de lecture vidéo pour ${product.nom}: ${e.message}`);
+                                        videoElement.muted = true;
+                                        videoElement.play().catch(err => console.error(`❌ Échec de lecture même muette: ${err.message}`));
+                                    });
+                                }
+                            }, 100);
+                        }
+                    } catch (error) {
+                        console.error(`❌ Erreur lors du rendu du produit: ${error.message}`, product);
+                    }
+                });
+                
+                console.log(`✅ Rendu terminé: ${filteredProducts.length} produits affichés`);
+            }
+            
+            // Fonction pour afficher les détails d'un produit
+            function showProductDetail(product) {
+                currentProductId = product.id;
+                
+                document.getElementById('detail-title').textContent = product.nom || 'Produit sans nom';
+                
+                // Gestion des vidéos - Priorité à la vidéo
+                const videoContainer = document.getElementById('detail-video-container');
+                
+                // Débogage pour voir les données vidéo
+                console.log("Affichage des détails du produit:", product.nom);
+                console.log("Ce produit a des vidéos:", product.hasOwnProperty('videos') && product.videos.length > 0 ? "Oui" : "Non");
+                if (product.videos) {
+                    console.log("Nombre de vidéos:", product.videos.length);
+                    console.log("URLs des vidéos:", product.videos);
+                }
+                
+                // On désactive la vidéo de test pour utiliser uniquement les vraies vidéos d'Airtable
+                const useTestVideo = false; // Mettre à false pour utiliser uniquement les vidéos d'Airtable
+                const testVideoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+                
+                // Afficher toutes les propriétés du produit pour le débogage
+                console.log("Toutes les propriétés du produit:", Object.keys(product));
+                
+                // Vérifier si le produit a des vidéos
+                const hasVideo = (product.videos && product.videos.length > 0);
+                
+                if (hasVideo || useTestVideo) {
+                    // Montrer les détails du format vidéo dans la console
+                    if (hasVideo) {
+                        console.log("Chargement de la vidéo d'Airtable:", product.videos[0]);
+                    } else {
+                        console.log("Pas de vidéo disponible dans Airtable, chargement de la vidéo de test:", testVideoUrl);
+                    }
+                    
+                    // Utilisez la vidéo du produit s'il en a une, sinon utilisez la vidéo de test
+                    const videoUrl = hasVideo ? product.videos[0] : testVideoUrl;
+                    
+                    // Utiliser une balise video complète avec attributs corrects
+                    videoContainer.innerHTML = `
+                        <video id="product-video" controls autoplay loop playsinline style="width:100%; height:100%; object-fit:cover; display:block; background-color:#000;">
+                            <source src="${videoUrl}" type="video/mp4">
+                            Votre navigateur ne prend pas en charge la lecture de vidéos.
+                        </video>
+                        <button class="video-display-toggle" id="video-display-toggle">Mode plein écran</button>
+                    `;
+                    
+                    // S'assurer que le conteneur vidéo est visible
+                    videoContainer.style.display = 'block';
+                    videoContainer.style.height = '50vh'; /* Réduction de 60vh à 50vh */
+                    videoContainer.style.minHeight = '450px'; /* Réduction de la hauteur minimale de 500px à 450px */
+                    
+                    // S'assurer que la vidéo démarre automatiquement après son chargement
+                    setTimeout(() => {
+                        const videoElement = document.getElementById('product-video');
+                        const toggleButton = document.getElementById('video-display-toggle');
+                        
+                        if (videoElement) {
+                            console.log("Tentative de lecture de la vidéo...");
+                            // S'assurer que la vidéo est visible
+                            videoElement.style.display = 'block';
+                            videoElement.style.maxWidth = '100%';
+                            videoElement.style.maxHeight = '100%';
+                            videoElement.style.margin = '0 auto';
+                            
+                            // Ajouter le gestionnaire d'événements pour le bouton de basculement
+                            if (toggleButton) {
+                                toggleButton.addEventListener('click', function() {
+                                    if (videoElement.style.objectFit === 'cover') {
+                                        videoElement.style.objectFit = 'contain';
+                                        this.textContent = 'Mode plein écran';
+                                    } else {
+                                        videoElement.style.objectFit = 'cover';
+                                        this.textContent = 'Voir tout';
+                                    }
+                                });
+                            }
+                            
+                            videoElement.play()
+                                .then(() => console.log('Lecture vidéo démarrée automatiquement'))
+                                .catch(e => {
+                                    console.error('Erreur lors du démarrage automatique de la vidéo:', e);
+                                    // On réessaie en mettant explicitement la vidéo en mute si ce n'est pas déjà fait
+                                    videoElement.muted = true;
+                                    videoElement.play().catch(err => 
+                                        console.error('Échec même avec vidéo muette:', err));
+                                });
+                        } else {
+                            console.error("Élément vidéo non trouvé après création");
+                        }
+                    }, 100);
+                } else {
+                    console.log("Aucune vidéo trouvée pour ce produit");
+                    videoContainer.style.display = 'none';
+                }
+                
+                // Gestion de l'image principale - Masquer l'image si une vidéo est présente
+                const detailImage = document.getElementById('detail-image');
+                if (product.image) {
+                    detailImage.src = product.image;
+                    // Si une vidéo est présente, on masque l'image
+                    if (hasVideo || useTestVideo) {
+                        detailImage.style.display = 'none'; // Cacher l'image complètement
+                    } else {
+                        detailImage.style.height = '250px'; // Hauteur normale
+                        detailImage.style.display = 'block';
+                    }
+                } else {
+                    // Cacher l'image si non disponible
+                    detailImage.style.display = 'none';
+                }
+                
+                document.getElementById('detail-description').textContent = product.description || "Aucune description disponible.";
+                
+                // Afficher les prix de façon dynamique
+                const priceSection = document.querySelector('.price-section');
+                
+                // Vider la section prix
+                priceSection.innerHTML = '<h3>Prix</h3>';
+                
+                // Ajouter tous les prix disponibles
+                if (product.prix) {
+                    // On ne montre plus le prix à l'unité
+                    // Séparer les prix par poids et les anciens formats "par_X"
+                    const weightPrices = [];
+                    const oldFormatPrices = [];
+                    
+                    Object.keys(product.prix).forEach(key => {
+                        if (key.includes('g') || key.includes('kg')) {
+                            // Format de poids (3.5g, 5g, 10g, 500g, 1kg, 2kg etc.)
+                            weightPrices.push(key);
+                        } else if (key.startsWith('par_')) {
+                            // Ancien format (par_3, par_5, etc.)
+                            oldFormatPrices.push(key);
+                        }
+                    });
+                    
+                    // Fonction pour extraire la valeur numérique d'un poids et le convertir en grammes pour le tri
+                    const getWeightValueInGrams = (weight) => {
+                        if (weight.includes('kg')) {
+                            // Convertir kg en g (1kg = 1000g, 2kg = 2000g)
+                            return parseFloat(weight.replace('kg', '')) * 1000;
+                        } else {
+                            // Pour les poids en grammes, simplement extraire la valeur numérique
+                            return parseFloat(weight.replace('g', ''));
+                        }
+                    };
+                    
+                    // Trier les poids par ordre croissant
+                    weightPrices.sort((a, b) => getWeightValueInGrams(a) - getWeightValueInGrams(b));
+                    
+                    // Ajouter les prix par poids s'il y en a
+                    if (weightPrices.length > 0) {
+                        // Ajouter le titre pour la section des poids
+                        const weightTitle = document.createElement('h4');
+                        weightTitle.textContent = 'Prix par poids';
+                        weightTitle.style.marginTop = '10px';
+                        weightTitle.style.marginBottom = '10px';
+                        priceSection.appendChild(weightTitle);
+                        
+                        // Ajouter chaque option de poids
+                        weightPrices.forEach(weight => {
+                            const priceRow = document.createElement('div');
+                            priceRow.className = 'price-row';
+                            priceRow.innerHTML = `
+                                <span>${weight}</span>
+                                <span>${product.prix[weight]}</span>
+                            `;
+                            priceSection.appendChild(priceRow);
+                        });
+                    } else {
+                        // Ajouter un message si aucun prix n'est disponible
+                        const noPrice = document.createElement('p');
+                        noPrice.textContent = 'Aucun prix par poids disponible.';
+                        noPrice.style.fontStyle = 'italic';
+                        priceSection.appendChild(noPrice);
+                    }
+                    
+                    // Nous gardons la rétrocompatibilité pour l'ancien format, mais avec un titre distinct
+                    // Trier les anciens formats par ordre croissant (pour la rétrocompatibilité)
+                    oldFormatPrices.sort((a, b) => {
+                        const numA = parseInt(a.replace('par_', ''));
+                        const numB = parseInt(b.replace('par_', ''));
+                        return numA - numB;
+                    });
+                    
+                    // Ajouter les prix au format "par X" s'il y en a (pour la rétrocompatibilité)
+                    if (oldFormatPrices.length > 0) {
+                        // Ajouter un titre pour la section des quantités
+                        const quantityTitle = document.createElement('h4');
+                        quantityTitle.textContent = 'Prix par quantité';
+                        quantityTitle.style.marginTop = '15px';
+                        quantityTitle.style.marginBottom = '10px';
+                        priceSection.appendChild(quantityTitle);
+                        
+                        // Ajouter chaque option de quantité
+                        oldFormatPrices.forEach(key => {
+                            const quantity = key.replace('par_', '');
+                            const priceRow = document.createElement('div');
+                            priceRow.className = 'price-row';
+                            priceRow.innerHTML = `
+                                <span>Par ${quantity}</span>
+                                <span>${product.prix[key]}</span>
+                            `;
+                            priceSection.appendChild(priceRow);
+                        });
+                    }
+                } else {
+                    // Aucun prix disponible
+                    const noPrice = document.createElement('p');
+                    noPrice.textContent = 'Aucun prix disponible pour ce produit.';
+                    noPrice.style.fontStyle = 'italic';
+                    priceSection.appendChild(noPrice);
+                }
+                
+                // Afficher le conteneur de détails
+                productDetail.style.display = 'flex';
+                // Empêcher le défilement de la page
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Fonction pour fermer les détails d'un produit
+            function hideProductDetail() {
+                // Arrêter la vidéo si elle existe
+                const videoElement = document.getElementById('product-video');
+                if (videoElement) {
+                    // Mettre la vidéo en pause
+                    videoElement.pause();
+                    // Vider la source pour s'assurer que l'audio s'arrête complètement
+                    videoElement.src = '';
+                    console.log('Vidéo arrêtée lors du retour à la page principale');
+                }
+                
+                productDetail.style.display = 'none';
+                document.body.style.overflow = ''; // Réactiver le scroll
+            }
+            
+            // Configurer les écouteurs d'événements
+            
+            // Boutons de filtres
+            categoriesFilter.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown(categoriesDropdown);
+            });
+            
+            provenanceFilter.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown(provenanceDropdown);
+            });
+            
+            // Overlay pour fermer les menus
+            overlay.addEventListener('click', () => {
+                closeAllDropdowns();
+            });
+            
+            // Fermer les menus quand on clique ailleurs sur la page
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.filter-wrapper') && !e.target.closest('.filter-dropdown')) {
+                    closeAllDropdowns();
+                }
+            });
+            
+            // Bouton de retour pour la page de détails
+            backBtn.addEventListener('click', hideProductDetail);
+            
+            // Gérer le bouton de contact
+            contactBtn.addEventListener('click', () => {
+                // Rediriger vers le lien Telegram de La Cocina
+                window.open('https://t.me/LaCocinaOff', '_blank');
+                
+                // Fermer la fenêtre de détail du produit
+                hideProductDetail();
+            });
+
+            // Bouton d'urgence pour vider le cache et forcer un rechargement complet
+            document.getElementById('emergency-refresh').addEventListener('click', function() {
+                console.log("Nettoyage d'urgence du cache et rechargement...");
+                
+                // Informer l'utilisateur
+                this.textContent = '⏳ Nettoyage du cache...';
+                this.disabled = true;
+                
+                // Supprimer toutes les données de cache pour ce site
+                if ('caches' in window) {
+                    caches.keys().then(function(cacheNames) {
+                        return Promise.all(
+                            cacheNames.map(function(cacheName) {
+                                console.log("Suppression du cache:", cacheName);
+                                return caches.delete(cacheName);
+                            })
+                        );
+                    }).then(function() {
+                        console.log("Tous les caches ont été supprimés");
+                        
+                        // Requête pour forcer l'API à rafraîchir ses données
+                        return fetch('./api/data.json?force=true&clearcache=true&time=' + new Date().getTime(), {
+                            method: 'GET',
+                            headers: {
+                                'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+                                'Pragma': 'no-cache',
+                                'Expires': '0'
+                            },
+                            cache: 'no-store'
+                        });
+                    }).then(function() {
+                        console.log("Rechargement forcé de la page...");
+                        // Recharger la page en contournant le cache
+                        window.location.reload(true);
+                    }).catch(function(err) {
+                        console.error("Erreur lors du nettoyage du cache:", err);
+                        document.getElementById('emergency-refresh').textContent = '❌ Échec du nettoyage';
+                        document.getElementById('emergency-refresh').disabled = false;
+                    });
+                } else {
+                    // Si l'API Cache n'est pas disponible, simplement recharger la page
+                    window.location.reload(true);
+                }
+            });
+
+            // Navigation - Gestion des boutons du footer
+            const navHome = document.getElementById('nav-home');
+            const navInfo = document.getElementById('nav-info');
+            const navContact = document.getElementById('nav-contact');
+            
+            // Fonction pour activer un onglet de navigation
+            function activateNavItem(item) {
+                document.querySelectorAll('.nav-item').forEach(navItem => {
+                    navItem.classList.remove('active');
+                });
+                item.classList.add('active');
+            }
+            
+            // Gestionnaires d'événements pour les boutons de navigation
+            navHome.addEventListener('click', function() {
+                activateNavItem(this);
+                // Déjà sur la page d'accueil, pas besoin de redirection
+            });
+            
+            navInfo.addEventListener('click', function() {
+                window.location.href = './info.html';
+            });
+            
+            navContact.addEventListener('click', function() {
+                window.location.href = './contact.html';
+            });
+        });
+    </script>
+</body>
+</html> 

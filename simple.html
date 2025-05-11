@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichage simplifié des produits</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #202020;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #ff6b35;
+        }
+        .status {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .refresh-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product {
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        .product-image {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+            background: #222;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #000;
+        }
+        .product-info {
+            padding: 15px;
+        }
+        .product-name {
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        .product-category {
+            color: #ff6b35;
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .error {
+            padding: 20px;
+            background: #ff0000;
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .debug-info {
+            background: #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow: auto;
+        }
+        
+        /* Modal pour affichage en grand des vidéos */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+        .modal-video {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+            background: #000;
+        }
+        
+        /* Styles pour masquer les éléments de rafraîchissement */
+        .refresh-container {
+            display: none; /* Masquer complètement */
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .refresh-timestamp {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .refresh-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .refresh-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .emergency-btn {
+            background-color: #E74C3C;
+        }
+        
+        .emergency-btn:hover {
+            background-color: #C0392B;
+        }
+        
+        /* Barre de navigation */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 80;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: #ff6b35;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* Style pour les modales d'info et de contact */
+        .modal-info, .modal-contact {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            position: relative;
+            background-color: #333;
+            border-radius: 15px;
+            margin: 50px auto;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            color: #ff6b35;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .modal-body {
+            margin-top: 20px;
+        }
+        
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #444;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .contact-link:hover {
+            background-color: #ff6b35;
+        }
+        
+        .contact-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><img src="img/Sans titre2.jpeg" alt="La Cocina" width="50" style="border-radius: 50%; object-fit: cover;"> LaCocina</h1>
+        </div>
+        
+        <!-- Barre de navigation -->
+        <div class="navbar">
+            <div class="nav-item active" id="nav-home">
+                <div class="nav-icon">🏠</div>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" id="nav-info">
+                <div class="nav-icon">ℹ️</div>
+                <span>Infos</span>
+            </div>
+            <div class="nav-item" id="nav-contact">
+                <div class="nav-icon">📞</div>
+                <span>Contact</span>
+            </div>
+        </div>
+        
+        <!-- Section de rafraîchissement -->
+        <div class="refresh-container" style="display: none;">
+            <div class="refresh-timestamp" id="refresh-timestamp">Dernière mise à jour: Jamais</div>
+            <button id="emergency-refresh" class="refresh-btn emergency-btn">🧹 Vider cache et recharger</button>
+        </div>
+        
+        <div class="status" id="status" style="display: none;">Chargement des données...</div>
+        
+        <button id="refresh-btn" class="refresh-btn" style="display: none;">🔄 Rafraîchir les données</button>
+        
+        <div id="debug-info" class="debug-info" style="display: none;">Logs de débogage...</div>
+        
+        <div id="products" class="products">
+            <!-- Les produits seront ajoutés ici par JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Modal pour afficher les vidéos en grand -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">×</button>
+            <video id="modal-video" class="modal-video" controls autoplay>
+                <source id="modal-video-source" src="" type="video/mp4">
+                Votre navigateur ne prend pas en charge les vidéos.
+            </video>
+        </div>
+    </div>
+    
+    <script>
+        // Variables pour stocker les données
+        let products = [];
+        let lastData = null;
+        let lastRefresh = null;
+        
+        // Obtenir des éléments du DOM
+        const statusEl = document.getElementById('status');
+        const productsEl = document.getElementById('products');
+        const debugEl = document.getElementById('debug-info');
+        const refreshBtn = document.querySelector('.refresh-btn');
+        const emergencyRefreshBtn = document.getElementById('emergency-refresh');
+        const refreshTimestamp = document.getElementById('refresh-timestamp');
+        const videoModal = document.getElementById('video-modal');
+        const modalVideo = document.getElementById('modal-video');
+        const modalVideoSource = document.getElementById('modal-video-source');
+        const modalClose = document.getElementById('modal-close');
+        
+        // Mettre à jour le texte de dernière mise à jour
+        function updateLastRefreshText(timestamp) {
+            const refreshTimestamp = document.querySelector('.refresh-timestamp');
+            if (refreshTimestamp) {
+                if (timestamp) {
+                    const date = new Date(timestamp);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    refreshTimestamp.textContent = 'Dernière mise à jour: ' + formattedDate;
+                } else {
+                    refreshTimestamp.textContent = 'Dernière mise à jour: Jamais';
+                }
+            }
+        }
+        
+        // Fonction pour logger des messages
+        function log(message) {
+            // Affichage en console uniquement
+            console.log(message);
+            
+            // Désactivation de l'affichage visuel des messages
+            // if (debugEl) {
+            //     debugEl.textContent += message + '\n';
+            //     debugEl.scrollTop = debugEl.scrollHeight;
+            // }
+        }
+        
+        // Charger les données depuis le fichier JSON
+        async function loadData() {
+            try {
+                // Affichage de l'état
+                statusEl.textContent = 'Chargement des données...';
+                statusEl.style.backgroundColor = '#333';
+                
+                // Créer une URL avec un paramètre anti-cache
+                const timestamp = new Date().getTime();
+                const url = `./api/data.json?nocache=${timestamp}`;
+                
+                log(`Chargement des données depuis: ${url}`);
+                
+                // Faire la requête HTTP
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    },
+                    cache: 'no-store'
+                });
+                
+                // Vérifier la réponse
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+                }
+                
+                // Récupérer les données JSON
+                const data = await response.json();
+                
+                // Vérifier si les données contiennent des plantes
+                if (!data.plantes || !Array.isArray(data.plantes) || data.plantes.length === 0) {
+                    log('Les données ne contiennent aucune plante');
+                    statusEl.textContent = 'Aucune plante trouvée dans les données';
+                    statusEl.style.backgroundColor = '#f44336';
+                    return;
+                }
+                
+                // Afficher les informations sur les plantes
+                log(`Total des plantes reçues: ${data.plantes.length}`);
+                if (data.refreshed_at) {
+                    log(`Dernière mise à jour: ${data.refreshed_at}`);
+                }
+                if (data.categories) {
+                    log(`Catégories disponibles: ${data.categories.join(', ')}`);
+                }
+                
+                // Afficher l'état du chargement - mais le garder caché
+                statusEl.textContent = `${data.plantes.length} produits chargés avec succès`;
+                statusEl.style.backgroundColor = '#4caf50';
+                statusEl.style.display = 'none'; // Garder le statut caché
+                
+                // Afficher les produits
+                displayProducts(data.plantes);
+                
+                // Chargement complet, affichage des produits
+                log(`Chargement terminé, ${data.plantes.length} produits chargés avec succès.`);
+                // Maintenir l'élément de statut caché
+                statusEl.style.display = 'none';
+                
+            } catch (error) {
+                log(`ERREUR: ${error.message}`);
+                statusEl.textContent = `Erreur: ${error.message}`;
+                statusEl.style.backgroundColor = '#f44336';
+                
+                // Afficher une div d'erreur
+                productsEl.innerHTML = `
+                    <div class="error" style="grid-column: 1/-1;">
+                        <h3>Erreur lors du chargement des données</h3>
+                        <p>${error.message}</p>
+                        <p>Vérifiez les logs dans la console pour plus de détails.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Afficher les produits dans la grille
+        function displayProducts(products) {
+            // Vider le conteneur
+            productsEl.innerHTML = '';
+            
+            // Vérifier s'il y a des produits
+            if (!products || products.length === 0) {
+                productsEl.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 30px;">
+                        <h3>Aucun produit disponible</h3>
+                        <p>Aucun produit n'a été trouvé dans les données.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Afficher chaque produit
+            products.forEach(product => {
+                // Créer l'élément de produit
+                const productEl = document.createElement('div');
+                productEl.className = 'product';
+                
+                // Déterminer le média à afficher (vidéo ou image)
+                let mediaHtml = '';
+                const hasVideo = product.videos && product.videos.length > 0;
+                const videoUrl = hasVideo ? product.videos[0] : '';
+                const imageUrl = product.image || 'https://via.placeholder.com/250x250?text=No+Image';
+                
+                if (hasVideo) {
+                    // Créer un élément vidéo
+                    mediaHtml = `
+                        <div class="product-image">
+                            <video class="product-video" muted autoplay loop playsinline>
+                                <source src="${videoUrl}" type="video/mp4">
+                                Votre navigateur ne prend pas en charge les vidéos.
+                            </video>
+                        </div>
+                    `;
+                } else {
+                    // Utiliser une image
+                    mediaHtml = `
+                        <div class="product-image">
+                            <img src="${imageUrl}" alt="${product.nom || 'Produit sans nom'}" onerror="this.src='https://via.placeholder.com/250x250?text=Error'">
+                        </div>
+                    `;
+                }
+                
+                // Créer le contenu HTML
+                productEl.innerHTML = `
+                    ${mediaHtml}
+                    <div class="product-info">
+                        <h3 class="product-name">${product.nom || 'Produit sans nom'}</h3>
+                        <p class="product-category">${product.categorie || 'Sans catégorie'} - ${product.provenance || 'Origine inconnue'}</p>
+                    </div>
+                `;
+                
+                // Ajouter un gestionnaire d'événements pour les vidéos
+                if (hasVideo) {
+                    const videoElement = productEl.querySelector('video');
+                    if (videoElement) {
+                        videoElement.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            openVideoModal(videoUrl);
+                        });
+                    }
+                }
+                
+                // Ajouter l'élément à la grille
+                productsEl.appendChild(productEl);
+                
+                // Démarrer la lecture des vidéos
+                if (hasVideo) {
+                    const videoElement = productEl.querySelector('video');
+                    if (videoElement) {
+                        videoElement.muted = true;
+                        videoElement.play().catch(e => {
+                            console.warn(`Erreur de lecture vidéo: ${e.message}`);
+                        });
+                    }
+                }
+            });
+            
+            log(`${products.length} produits affichés sur la page`);
+        }
+        
+        // Fonction pour ouvrir la modal avec une vidéo
+        function openVideoModal(videoUrl) {
+            modalVideoSource.src = videoUrl;
+            modalVideo.load();
+            videoModal.style.display = 'flex';
+            
+            // Démarrer la lecture
+            modalVideo.play().catch(e => {
+                console.warn(`Erreur de lecture vidéo dans la modal: ${e.message}`);
+            });
+        }
+        
+        // Fermer la modal
+        modalClose.addEventListener('click', () => {
+            modalVideo.pause();
+            videoModal.style.display = 'none';
+        });
+        
+        // Fermer la modal en cliquant à l'extérieur
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                modalVideo.pause();
+                videoModal.style.display = 'none';
+            }
+        });
+        
+        // Gérer le clic sur le bouton de rafraîchissement
+        refreshBtn.addEventListener('click', async () => {
+            log('Rafraîchissement des données...');
+            refreshBtn.disabled = true;
+            refreshBtn.textContent = '⏳ Chargement...';
+            
+            try {
+                // Faire une requête pour forcer le rafraîchissement côté serveur
+                const response = await fetch(`/api/data.json?force=true&time=${new Date().getTime()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erreur lors du rafraîchissement: ${response.status}`);
+                }
+                
+                // Charger les nouvelles données
+                await loadData();
+                
+            } catch (error) {
+                log(`Erreur lors du rafraîchissement: ${error.message}`);
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = '🔄 Rafraîchir les données';
+            }
+        });
+        
+        // Charger les données au chargement de la page
+        document.addEventListener('DOMContentLoaded', loadData);
+        
+        fetch('./api/data.json' + '?t=' + new Date().getTime(), {
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (lastData && JSON.stringify(data) !== JSON.stringify(lastData)) {
+                console.log("Nouvelles données détectées, rechargement de la page");
+                window.location.reload(true);
+                return;
+            }
+            
+            lastData = data;
+            
+            if (data.timestamp) {
+                updateLastRefreshText(data.timestamp);
+            }
+        });
+        
+        // Gestion de la navigation
+        const navHome = document.getElementById('nav-home');
+        const navInfo = document.getElementById('nav-info');
+        const navContact = document.getElementById('nav-contact');
+        
+        // Fonction pour activer un onglet de navigation
+        function activateNavItem(item) {
+            document.querySelectorAll('.nav-item').forEach(navItem => {
+                navItem.classList.remove('active');
+            });
+            item.classList.add('active');
+        }
+        
+        // Gestionnaires d'événements pour les boutons de navigation
+        navHome.addEventListener('click', function() {
+            activateNavItem(this);
+            // Déjà sur la page simple.html, pas besoin de redirection
+        });
+        
+        navInfo.addEventListener('click', function() {
+            window.location.href = './info.html';
+        });
+        
+        navContact.addEventListener('click', function() {
+            window.location.href = './contact.html';
+        });
+        
+        // Fermer la modale vidéo en cliquant en dehors
+        window.addEventListener('click', function(event) {
+            if (event.target === videoModal) {
+                modalVideo.pause();
+                videoModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

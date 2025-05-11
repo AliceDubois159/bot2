@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer des Images Placeholder</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .placeholder {
+            width: 300px;
+            height: 300px;
+            margin: 10px;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+        .placeholder canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .instructions {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .save-btn {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Générateur d'Images Placeholder</h1>
+    
+    <div class="instructions">
+        <p>Cette page crée 5 images placeholder pour vos produits. Cliquez sur le bouton "Télécharger" sous chaque image pour l'enregistrer, ou cliquez-droit et sélectionnez "Enregistrer l'image sous...".</p>
+        <p>Enregistrez les images dans le dossier <code>webapp/img/</code> avec les noms <code>placeholder1.jpg</code>, <code>placeholder2.jpg</code>, etc.</p>
+    </div>
+    
+    <div id="placeholders"></div>
+    
+    <script>
+        // Fonction pour générer une couleur aléatoire vive
+        function getRandomColor() {
+            const hue = Math.floor(Math.random() * 360);
+            return `hsl(${hue}, 70%, 60%)`;
+        }
+        
+        // Fonction pour dessiner un gradient
+        function drawGradient(ctx, width, height, colorA, colorB) {
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, colorA);
+            gradient.addColorStop(1, colorB);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+        }
+        
+        // Fonction pour dessiner une forme aléatoire
+        function drawRandomShape(ctx, width, height) {
+            ctx.fillStyle = getRandomColor();
+            ctx.globalAlpha = 0.7;
+            
+            const shapeType = Math.floor(Math.random() * 3);
+            
+            if (shapeType === 0) {
+                // Cercle
+                const radius = width * 0.3;
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (shapeType === 1) {
+                // Rectangle
+                const w = width * (0.2 + Math.random() * 0.3);
+                const h = height * (0.2 + Math.random() * 0.3);
+                const x = Math.random() * (width - w);
+                const y = Math.random() * (height - h);
+                ctx.fillRect(x, y, w, h);
+            } else {
+                // Triangle
+                const x1 = Math.random() * width;
+                const y1 = Math.random() * height;
+                const x2 = Math.random() * width;
+                const y2 = Math.random() * height;
+                const x3 = Math.random() * width;
+                const y3 = Math.random() * height;
+                
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.lineTo(x3, y3);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            ctx.globalAlpha = 1.0;
+        }
+        
+        // Fonction pour dessiner un motif de feuilles
+        function drawLeafPattern(ctx, width, height) {
+            // Dessiner plusieurs feuilles
+            for (let i = 0; i < 8; i++) {
+                drawLeaf(ctx, 
+                    Math.random() * width, 
+                    Math.random() * height, 
+                    30 + Math.random() * 50, 
+                    getRandomColor());
+            }
+        }
+        
+        // Fonction pour dessiner une feuille
+        function drawLeaf(ctx, x, y, size, color) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(Math.random() * Math.PI * 2);
+            
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            
+            // Dessiner la forme de la feuille
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(size/3, size/3, size/2, size/2, 0, size);
+            ctx.bezierCurveTo(-size/2, size/2, -size/3, size/3, 0, 0);
+            
+            ctx.fill();
+            
+            // Dessiner la nervure centrale
+            ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, size * 0.9);
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
+        // Fonction pour créer une image placeholder
+        function createPlaceholder(index) {
+            const container = document.createElement('div');
+            container.className = 'placeholder';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 600;
+            container.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Fond avec dégradé
+            const colorA = getRandomColor();
+            const colorB = getRandomColor();
+            drawGradient(ctx, canvas.width, canvas.height, colorA, colorB);
+            
+            // Ajouter des formes aléatoires
+            for (let i = 0; i < 5; i++) {
+                drawRandomShape(ctx, canvas.width, canvas.height);
+            }
+            
+            // Pour certaines images, ajouter un motif de feuilles
+            if (index % 2 === 0) {
+                drawLeafPattern(ctx, canvas.width, canvas.height);
+            }
+            
+            // Ajouter un texte "Placeholder"
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`Placeholder ${index}`, canvas.width/2, canvas.height/2);
+            
+            // Ajouter un bouton de téléchargement
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'save-btn';
+            downloadBtn.textContent = 'Télécharger';
+            downloadBtn.onclick = function() {
+                const link = document.createElement('a');
+                link.download = `placeholder${index}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+            };
+            
+            container.appendChild(downloadBtn);
+            
+            return container;
+        }
+        
+        // Créer 5 placeholders
+        const placeholdersContainer = document.getElementById('placeholders');
+        for (let i = 1; i <= 5; i++) {
+            placeholdersContainer.appendChild(createPlaceholder(i));
+        }
+    </script>
+</body>
+</html> 

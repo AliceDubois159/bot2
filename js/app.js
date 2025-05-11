@@ -244,7 +244,8 @@ async function loadData() {
     
     try {
         console.log("Tentative de chargement depuis:", API_URL);
-        const response = await fetch(API_URL);
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${API_URL}?t=${timestamp}`);
         
         if (!response.ok) {
             console.error(`Erreur HTTP: ${response.status}`);

@@ -9,17 +9,6 @@ Ce répertoire contient les fichiers à déployer sur GitHub Pages.
 3. Dans les paramètres du dépôt GitHub, activez GitHub Pages sur la branche main
 4. Configurez les secrets GitHub pour l'accès à Airtable (voir ci-dessous)
 
-## Configuration des secrets GitHub pour Airtable
-
-Pour que l'actualisation automatique des données fonctionne:
-
-1. Dans votre dépôt GitHub, allez dans "Settings" > "Secrets and variables" > "Actions"
-2. Cliquez sur "New repository secret"
-3. Ajoutez les secrets suivants :
-   - Nom : `AIRTABLE_API_KEY`  
-     Valeur : `patyDPr6vjdTh9Jyc.59ab6205d522d9c00dcc41bf603f007cfd1792abae4b4cd740790261f3905429`
-   - Nom : `AIRTABLE_BASE_ID`  
-     Valeur : `appSCgIw9WWJq4N27`
 
 ## Actualisation des données
 

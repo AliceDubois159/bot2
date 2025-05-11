@@ -1,21 +1,22 @@
 {
   "categories": [
     "Toutes les catégories",
-    "Hash Moroco",
-    "Weed Spain"
+    "Hash 🇲🇦",
+    "Weed 🇪🇸"
   ],
   "provenances": [
     "Toutes les provenances",
-    "Farm 1",
-    "Farm 2"
+    "CFF",
+    "VVS",
+    "Farm 3"
   ],
   "plantes": [
     {
       "id": "recANc87qPt0NMNao",
       "nom": "Ff X ?",
       "type": "Hash",
-      "categorie": "Hash Moroco",
-      "provenance": "Farm 1",
+      "categorie": "Hash 🇲🇦",
+      "provenance": "CFF",
       "image": null,
       "prix": {
         "5g": 60,
@@ -33,8 +34,8 @@
       "id": "recGHtgifYl0GFQkR",
       "nom": "VVS",
       "type": "Hash",
-      "categorie": "Hash Moroco",
-      "provenance": "Farm 1",
+      "categorie": "Hash 🇲🇦",
+      "provenance": "VVS",
       "image": null,
       "prix": {
         "5g": 70,
@@ -52,8 +53,8 @@
       "id": "recc1dOpI9IZs3uzL",
       "nom": "Cali Spain",
       "type": "Weed",
-      "categorie": "Weed Spain",
-      "provenance": "Farm 2",
+      "categorie": "Weed 🇪🇸",
+      "provenance": "Farm 3",
       "image": null,
       "prix": {
         "3.5g": 40,
@@ -69,17 +70,6 @@
         "https://v5.airtableusercontent.com/v3/u/40/40/1746979200000/PrHcWDCAsgsLaIiq7RdooA/umis0S1MzUg0aeTtHqBXC9SOwVi13xcdduzhSV7WHBidSMJu5wjHqz3uzUTOkuH_wCsQ3sv9_7iiG7Oa6Bgro0Dls3N7omDH_ExXE5zXG3QbYvzre5tt5-2B0lsDj73LMgVqG4z0rT31zoLNBOFOS_UIX03f_Te675g4lVk-GvU/SPljCD1kxsfNK8umWcI1ME2Y8Vym0deqt6xjBXIW3Xk"
       ],
       "description": "Moroccan Peaches, 220/90µ"
-    },
-    {
-      "id": "reco56f483hr7ua9X",
-      "nom": "Sans nom",
-      "type": "",
-      "categorie": "",
-      "provenance": "",
-      "image": null,
-      "prix": {},
-      "videos": [],
-      "description": ""
     }
   ]
 }
